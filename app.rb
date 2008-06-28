@@ -100,7 +100,6 @@ def get_duration(result)
     values[2] << data["duration"] if cutoff15.include?(data["timestamp"])
   end
 
-  
   dur1.merge!(math_calc(values[0]))
   dur5.merge!(math_calc(values[1]))
   dur15.merge!(math_calc(values[2]))
