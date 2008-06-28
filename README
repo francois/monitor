@@ -4,7 +4,11 @@ All gathered statistics is hard-coded:
 
 * load average (1, 5 and 15 minutes);
 * disk space free / used on all partitions;
-* other statistics, as required.
+* number of web requests in the past 1/5/15 minutes;
+* hits per domain for the past 1/5/15 minutes;
+* bytes out for the past 1/5/15 minutes;
+* request duration for the past 1/5/15 minutes;
+* requests per second for the past 1/5/15 minutes.
 
 No other data processing is done in this application.
 
