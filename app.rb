@@ -25,6 +25,7 @@ get "/" do
   get_process_info(result)
   get_hits_per_domain(result)
   get_bytes_out(result)
+  get_duration(result)
 
   header "Content-Type" => "text/x-yaml; charset=utf-8"
   result.to_yaml
@@ -70,6 +71,55 @@ def get_bytes_out(result)
     hash["5min"] += data["size"] if cutoff5.include?(data["timestamp"])
     hash["15min"] += data["size"] if cutoff15.include?(data["timestamp"])
   end
+end
+
+def get_duration(result)
+  hash = result["duration"] = Hash.new {|h, k| h[k] = Hash.new {|h, k| h[k] = 0}}
+
+  dur1 = hash["1min"]
+  dur5 = hash["5min"]
+  dur15 = hash["15min"]
+
+  values = Array.new(3)
+  values[0] = Array.new
+  values[1] = Array.new
+  values[2] = Array.new
+
+  now = Time.now.utc
+  cutoff1 = (now - 60) .. now
+  cutoff5 = (now - 5*60) .. now
+  cutoff15 = (now - 15*60) .. now
+
+  Elif.foreach($access_log_path) do |line|
+    data = parse_access_log_line(line)
+    next if data.empty?
+    break unless cutoff15.include?(data["timestamp"])
+
+    if cutoff1.include?(data["timestamp"]) then
+      dur1["count"] += 1
+      dur1["total"] += data["duration"]
+      values[0] << data["duration"]
+    end
+
+    if cutoff5.include?(data["timestamp"]) then
+      dur5["count"] += 1
+      dur5["total"] += data["duration"]
+      values[1] << data["duration"]
+    end
+
+    if cutoff15.include?(data["timestamp"]) then
+      dur15["count"] += 1
+      dur15["total"] += data["duration"]
+      values[2] << data["duration"]
+    end
+  end
+
+  dur1["mean"] = dur1["total"] / dur1["count"].to_f
+  dur1["stddev"] = Math.sqrt(values[0].map {|n| n - dur1["mean"]}.map {|n| n*n}.inject {|memo, n| memo + n} / (dur1["count"].to_f - 1)) if dur1["mean"].finite? && dur1["count"] > 1
+  dur5["mean"] = dur5["total"] / dur5["count"].to_f
+  dur5["stddev"] = Math.sqrt(values[0].map {|n| n - dur5["mean"]}.map {|n| n*n}.inject {|memo, n| memo + n} / (dur5["count"].to_f - 1)) if dur5["mean"].finite? && dur5["count"] > 1
+  dur15["mean"] = dur15["total"] / dur15["count"].to_f
+  dur15["stddev"] = Math.sqrt(values[0].map {|n| n - dur15["mean"]}.map {|n| n*n}.inject {|memo, n| memo + n} / (dur15["count"].to_f - 1)) if dur15["mean"].finite? && dur15["count"] > 1
 end
 
 # Returns a Hash that corresponds to each important thing in the access log
