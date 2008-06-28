@@ -1,8 +1,0 @@
---- 
-format: 1
-handler: 
-  commit: 886c5a413e01a9d412edb45ee26e63b7009e99f0
-  branch: 0.2.1
-lock: 
-repository_url: git://github.com/bmizerany/sinatra.git
-repository_class: Piston::Git::Repository
