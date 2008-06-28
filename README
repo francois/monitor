@@ -1,0 +1,11 @@
+This is a Sinatra application (http://sinatrarb.com/) that gathers statistics about the current environment, and returns a YAML file for those statistics.
+
+All gathered statistics is hard-coded:
+
+* load average (1, 5 and 15 minutes);
+* disk space free / used on all partitions;
+* other statistics, as required.
+
+No other data processing is done in this application.
+
+This application should be called on a scheduled from within the cluster.
