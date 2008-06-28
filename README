@@ -4,7 +4,8 @@ All gathered statistics is hard-coded:
 
 * load average (1, 5 and 15 minutes);
 * disk space free / used on all partitions;
-* other statistics, as required.
+* currently executing futures;
+* future types in the past 1/5/15 minutes.
 
 No other data processing is done in this application.
 
