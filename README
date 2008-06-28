@@ -4,7 +4,10 @@ All gathered statistics is hard-coded:
 
 * load average (1, 5 and 15 minutes);
 * disk space free / used on all partitions;
-* other statistics, as required.
+* future queue length;
+* next 10 futures;
+* outbound email queue length;
+* rows / table.
 
 No other data processing is done in this application.
 
