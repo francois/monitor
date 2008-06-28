@@ -30,23 +30,14 @@ end
 def get_hits_per_domain(result)
   data = result["hits_per_domain"] = Hash.new {|h, k| h[k] = Hash.new {|h, k| h[k] = 0}}
 
-  now = Time.now.utc
-  cutoff1 = (now - 60) .. now
-  cutoff5 = (now - 5*60) .. now
-  cutoff15 = (now - 15*60) .. now
+  top1 = data["top1"]
+  top5 = data["top5"]
+  top15 = data["top15"]
 
-  top1 = data["1min"]
-  top5 = data["5min"]
-  top15 = data["15min"]
-
-  Elif.foreach($access_log_path) do |line|
-    data = parse_access_log_line(line)
-    next if data.empty?
-    break unless cutoff15.include?(data["timestamp"])
-
-    top1[data["domain"]] += 1 if cutoff1.include?(data["timestamp"])
-    top5[data["domain"]] += 1 if cutoff5.include?(data["timestamp"])
-    top15[data["domain"]] += 1 if cutoff15.include?(data["timestamp"])
+  elif_iterator($access_log_path, :parse_access_log_line, "timestamp") do |data, data1, data5, data15|
+    top1[data["domain"]] += 1 if data1
+    top5[data["domain"]] += 1 if data5
+    top15[data["domain"]] += 1 if data15
   end
 end
 
