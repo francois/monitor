@@ -64,7 +64,7 @@ def elif_iterator(filename, parser_method, timestamp_key, now=Time.now.utc)
     parsed_line = send(parser_method, line)
     next if parsed_line.empty?
 
-    timestamp = data[timestamp_key]
+    timestamp = parsed_line[timestamp_key]
     break unless cutoff15.include?(timestamp)
 
     yield parsed_line, cutoff1.include?(timestamp), cutoff5.include?(timestamp), true
