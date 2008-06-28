@@ -23,6 +23,7 @@ get "/" do
   get_process_info(result)
   get_futures_queue_length(result)
   get_next_futures(result)
+  get_email_queue_length(result)
 
   header "Content-Type" => "text/x-yaml; charset=utf-8"
   result.to_yaml
@@ -30,7 +31,7 @@ end
 
 def get_futures_queue_length(result)
   data = mysql("-e", '"SELECT COUNT(*) FROM futures WHERE futures.started_at IS NULL"')
-  result["queue_length"] = data.split("\n").last.to_i
+  result["future_queue_length"] = data.split("\n").last.to_i
 end
 
 def get_next_futures(result)
@@ -40,6 +41,11 @@ def get_next_futures(result)
     args = row[1].gsub("\\n", "\n")
     result["next10"] << {:type => row[0], :args => YAML.load(args)}
   end
+end
+
+def get_email_queue_length(result)
+  data = mysql("-e", '"SELECT COUNT(*) FROM recipients WHERE recipients.sent_at IS NULL"')
+  result["email_queue_length"] = data.split("\n").last.to_i
 end
 
 def mysql(*args)
