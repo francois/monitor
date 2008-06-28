@@ -44,19 +44,10 @@ end
 def get_bytes_out(result)
   hash = result["bytes_out"] = Hash.new {|h, k| h[k] = 0}
 
-  now = Time.now.utc
-  cutoff1 = (now - 60) .. now
-  cutoff5 = (now - 5*60) .. now
-  cutoff15 = (now - 15*60) .. now
-
-  Elif.foreach($access_log_path) do |line|
-    data = parse_access_log_line(line)
-    next if data.empty?
-    break unless cutoff15.include?(data["timestamp"])
-
-    hash["1min"] += data["size"] if cutoff1.include?(data["timestamp"])
-    hash["5min"] += data["size"] if cutoff5.include?(data["timestamp"])
-    hash["15min"] += data["size"] if cutoff15.include?(data["timestamp"])
+  elif_iterator($access_log_path, :parse_access_log_line, "timestamp") do |data, data1, data5, data15|
+    hash["1min"] += data["size"] if data1
+    hash["5min"] += data["size"] if data5
+    hash["15min"] += data["size"] if data15
   end
 end
 
@@ -72,19 +63,10 @@ def get_duration(result)
   values[1] = Array.new
   values[2] = Array.new
 
-  now = Time.now.utc
-  cutoff1 = (now - 60) .. now
-  cutoff5 = (now - 5*60) .. now
-  cutoff15 = (now - 15*60) .. now
-
-  Elif.foreach($access_log_path) do |line|
-    data = parse_access_log_line(line)
-    next if data.empty?
-    break unless cutoff15.include?(data["timestamp"])
-
-    values[0] << data["duration"] if cutoff1.include?(data["timestamp"])
-    values[1] << data["duration"] if cutoff5.include?(data["timestamp"])
-    values[2] << data["duration"] if cutoff15.include?(data["timestamp"])
+  elif_iterator($access_log_path, :parse_access_log_line, "timestamp") do |data, data1, data5, data15|
+    values[0] << data["duration"] if data1
+    values[1] << data["duration"] if data5
+    values[2] << data["duration"] if data15
   end
 
   dur1.merge!(math_calc(values[0]))
