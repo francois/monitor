@@ -55,8 +55,7 @@ end
 #
 # This method expects a block and will yield the parsed line as
 # well as three booleans for 1, 5 and 15 minute inclusion.
-def elif_iterator(filename, parser_method, timestamp_key)
-  now = Time.now.utc
+def elif_iterator(filename, parser_method, timestamp_key, now=Time.now.utc)
   cutoff1 = (now - 60) .. now
   cutoff5 = (now - 5*60) .. now
   cutoff15 = (now - 15*60) .. now
