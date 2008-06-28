@@ -24,6 +24,7 @@ get "/" do
   get_disk_free_space(result)
   get_process_info(result)
   get_hits_per_domain(result)
+  get_bytes_out(result)
 
   header "Content-Type" => "text/x-yaml; charset=utf-8"
   result.to_yaml
@@ -49,6 +50,25 @@ def get_hits_per_domain(result)
     top1[data["domain"]] += 1 if cutoff1.include?(data["timestamp"])
     top5[data["domain"]] += 1 if cutoff5.include?(data["timestamp"])
     top15[data["domain"]] += 1 if cutoff15.include?(data["timestamp"])
+  end
+end
+
+def get_bytes_out(result)
+  hash = result["bytes_out"] = Hash.new {|h, k| h[k] = 0}
+
+  now = Time.now.utc
+  cutoff1 = (now - 60) .. now
+  cutoff5 = (now - 5*60) .. now
+  cutoff15 = (now - 15*60) .. now
+
+  Elif.foreach($access_log_path) do |line|
+    data = parse_access_log_line(line)
+    next if data.empty?
+    break unless cutoff15.include?(data["timestamp"])
+
+    hash["1min"] += data["size"] if cutoff1.include?(data["timestamp"])
+    hash["5min"] += data["size"] if cutoff5.include?(data["timestamp"])
+    hash["15min"] += data["size"] if cutoff15.include?(data["timestamp"])
   end
 end
 
