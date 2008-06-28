@@ -8,4 +8,4 @@ All gathered statistics is hard-coded:
 
 No other data processing is done in this application.
 
-This application should be called on a scheduled from within the cluster.
+This application should be called on a schedule from within the cluster.
