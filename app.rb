@@ -9,12 +9,8 @@ require "extra_gatherers"
 require "time"
 
 configure do
-  $access_log_path = File.dirname(__FILE__) + "/access.log"
+  $access_log_path = ENV["ACCESS_LOG_PATH"]
   ACCESS_LOG_LINE_REGEXP = /^([-\w]+)\s(\d+[.]\d+[.]\d+[.]\d+)\s\[(\d+\/\w+\/\d+):(\d\d:\d\d:\d\d)\s\+0000\]\s([^\s]+)\s"(GET|POST|HEAD|PUT|DELETE|OPTIONS|TRACE)\s([^\s]+)\s(\w+\/\d\.\d)"\s(\d+)\s(-|\d+)\s"([^"]*)"\s"([^"]*)"\s(\d+)$/.freeze
-end
-
-configure :production do
-  $access_log_path = "/var/www/xlsuite/shared/log/access.log"
 end
 
 get "/" do
