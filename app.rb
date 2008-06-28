@@ -95,31 +95,23 @@ def get_duration(result)
     next if data.empty?
     break unless cutoff15.include?(data["timestamp"])
 
-    if cutoff1.include?(data["timestamp"]) then
-      dur1["count"] += 1
-      dur1["total"] += data["duration"]
-      values[0] << data["duration"]
-    end
-
-    if cutoff5.include?(data["timestamp"]) then
-      dur5["count"] += 1
-      dur5["total"] += data["duration"]
-      values[1] << data["duration"]
-    end
-
-    if cutoff15.include?(data["timestamp"]) then
-      dur15["count"] += 1
-      dur15["total"] += data["duration"]
-      values[2] << data["duration"]
-    end
+    values[0] << data["duration"] if cutoff1.include?(data["timestamp"])
+    values[1] << data["duration"] if cutoff5.include?(data["timestamp"])
+    values[2] << data["duration"] if cutoff15.include?(data["timestamp"])
   end
 
-  dur1["mean"] = dur1["total"] / dur1["count"].to_f
-  dur1["stddev"] = Math.sqrt(values[0].map {|n| n - dur1["mean"]}.map {|n| n*n}.inject {|memo, n| memo + n} / (dur1["count"].to_f - 1)) if dur1["mean"].finite? && dur1["count"] > 1
-  dur5["mean"] = dur5["total"] / dur5["count"].to_f
-  dur5["stddev"] = Math.sqrt(values[0].map {|n| n - dur5["mean"]}.map {|n| n*n}.inject {|memo, n| memo + n} / (dur5["count"].to_f - 1)) if dur5["mean"].finite? && dur5["count"] > 1
-  dur15["mean"] = dur15["total"] / dur15["count"].to_f
-  dur15["stddev"] = Math.sqrt(values[0].map {|n| n - dur15["mean"]}.map {|n| n*n}.inject {|memo, n| memo + n} / (dur15["count"].to_f - 1)) if dur15["mean"].finite? && dur15["count"] > 1
+  
+  dur1.merge!(math_calc(values[0]))
+  dur5.merge!(math_calc(values[1]))
+  dur15.merge!(math_calc(values[2]))
+end
+
+def math_calc(values)
+  return {"count" => 0, "mean" => 0.0, "stddev" => 0.0} if values.empty?
+  count = values.length
+  mean = values.inject {|memo, n| memo + n} / count.to_f
+  stddev = Math.sqrt(values.map {|n| n - mean}.map {|n| n*n}.inject {|memo, n| memo + n} / (count.to_f - 1)) if mean.finite? && count.nonzero?
+  {"count" => count, "mean" => mean, "stddev" => stddev}
 end
 
 # Returns a Hash that corresponds to each important thing in the access log
