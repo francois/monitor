@@ -75,11 +75,11 @@ def get_duration(result)
 end
 
 def math_calc(values)
-  return {"count" => 0, "mean" => 0.0, "stddev" => 0.0} if values.empty?
-  count = values.length
-  mean = values.inject {|memo, n| memo + n} / count.to_f
-  stddev = Math.sqrt(values.map {|n| n - mean}.map {|n| n*n}.inject {|memo, n| memo + n} / (count.to_f - 1)) if mean.finite? && count.nonzero?
-  {"count" => count, "mean" => mean, "stddev" => stddev}
+  if values.empty? then
+    {"count" => 0, "mean" => 0.0, "stddev" => 0.0}
+  else
+    {"count" => values.length, "mean" => values.mean, "stddev" => values.stddev}
+  end
 end
 
 # Returns a Hash that corresponds to each important thing in the access log
