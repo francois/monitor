@@ -1,5 +1,6 @@
 require "rubygems"
 require "sinatra"
+require "core_ext/array"
 
 get "/" do
   result = Hash.new
