@@ -8,14 +8,14 @@ end
 def get_hits_per_domain(result)
   data = result["hits_per_domain"] = Hash.new {|h, k| h[k] = Hash.new {|h, k| h[k] = 0}}
 
-  top1 = data["top1"]
-  top5 = data["top5"]
-  top15 = data["top15"]
+  hit1 = data["hit1"]
+  hit5 = data["hit5"]
+  hit15 = data["hit15"]
 
   elif_iterator($access_log_path, :parse_access_log_line, "timestamp") do |data, data1, data5, data15|
-    top1[data["domain"]] += 1 if data1
-    top5[data["domain"]] += 1 if data5
-    top15[data["domain"]] += 1 if data15
+    hit1[data["domain"]] += 1 if data1
+    hit5[data["domain"]] += 1 if data5
+    hit15[data["domain"]] += 1 if data15
   end
 end
 
