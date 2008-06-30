@@ -13,6 +13,7 @@ get "/" do
   get_loadavg(result)
   get_disk_free_space(result)
   get_process_info(result)
+  get_seconds_behind_master(result)
 
   header "Content-Type" => "text/x-yaml; charset=utf-8"
   result.to_yaml
