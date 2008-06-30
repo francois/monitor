@@ -4,7 +4,11 @@ All gathered statistics is hard-coded:
 
 * load average (1, 5 and 15 minutes);
 * disk space free / used on all partitions;
-* other statistics, as required.
+* request length in the past 1/5/15 minutes;
+* request rendering time in the past 1/5/15 minutes;
+* request db time in the past 1/5/15 minutes;
+* request app time in the past 1/5/15 minutes;
+
 
 No other data processing is done in this application.
 
