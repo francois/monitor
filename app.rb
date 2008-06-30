@@ -43,7 +43,7 @@ def get_last_futures(result)
   futures1 = result["history1"] = Array.new
   futures5 = result["history5"] = Array.new
   futures15 = result["history15"] = Array.new
-  elif_iterator($future_log_file, :parse_log_line, "timestamp", Time.parse("2008-06-25T13:50:37+0000")) do |data, data1, data5, data15|
+  elif_iterator($future_log_file, :parse_log_line, "timestamp") do |data, data1, data5, data15|
     futures1 << data if data1
     futures5 << data if data5
     futures15 << data if data15
