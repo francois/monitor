@@ -11,6 +11,7 @@ get "/" do
   get_disk_data
   get_loadavg_data
   get_futures_data
+  get_app_data
 
   erb :dashboard
 end
