@@ -1,0 +1,15 @@
+<div class="group">
+  <h2>Load Average</h2>
+  <div class="graph">
+    <h3>In the last minute</h3>
+    <%= partial(:loadavg, :locals => {:loadavg => @loadavg["1min"]}) %>
+  </div>
+  <div class="graph">
+    <h3>In the last 5 minutes</h3>
+    <%= partial(:loadavg, :locals => {:loadavg => @loadavg["5min"]}) %>
+  </div>
+  <div class="graph">
+    <h3>In the last 15 minutes</h3>
+    <%= partial(:loadavg, :locals => {:loadavg => @loadavg["15min"]}) %>
+  </div>
+</div>

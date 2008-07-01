@@ -34,23 +34,39 @@ get "/disk-free" do
   erb :disk_free
 end
 
+get "/loadavg" do
+  @loadavg = Hash.new {|h, k| h[k] = Hash.new}
+  all_data.each do |data|
+    name = data["name"]
+    data["loadavg"].each_pair do |key, value|
+      @loadavg[key][name] = value
+    end
+  end
+
+  @loadavg.each do |key, value|
+    @loadavg[key] = value.sort
+  end
+
+  erb :loadaverage
+end
+
 helpers do
   def all_data
-    return @result if @result
-    @result = Array.new
+    return @all_data if @all_data
+    @all_data = Array.new
     Dir["data/*.yml"].each do |file|
-      @result << YAML.load_file(file)
+      @all_data << YAML.load_file(file)
     end
-    @result
+    @all_data
   end
 
   def web_data
-    return @result if @result
-    @result = Array.new
+    return @web_data if @web_data
+    @web_data = Array.new
     Dir["data/web*.yml"].each do |file|
-      @result << YAML.load_file(file)
+      @web_data << YAML.load_file(file)
     end
-    @result
+    @web_data
   end
 
   # Copied from ActionPack 2.1.0.
