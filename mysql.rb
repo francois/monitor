@@ -10,8 +10,6 @@ end
 
 def sh(*args)
   cmd = args.flatten.join(" ")
-  puts "$ %s" % cmd
   data = `#{cmd}`
-  puts data.split("\n").map {|line| "> #{line}"}
   data
 end
