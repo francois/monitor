@@ -14,7 +14,7 @@
         <% @top10_1min.each do |domain, hits| %>
         <tr>
           <td><%= domain %></td>
-          <td><%= hits %></td>
+          <td><%= number_with_delimiter(hits) %></td>
         </tr>
         <% end %>
       </tbody>
@@ -34,7 +34,7 @@
         <% @top10_5min.each do |domain, hits| %>
         <tr>
           <td><%= domain %></td>
-          <td><%= hits %></td>
+          <td><%= number_with_delimiter(hits) %></td>
         </tr>
         <% end %>
       </tbody>
@@ -54,7 +54,7 @@
         <% @top10_15min.each do |domain, hits| %>
         <tr>
           <td><%= domain %></td>
-          <td><%= hits %></td>
+          <td><%= number_with_delimiter(hits) %></td>
         </tr>
         <% end %>
       </tbody>
