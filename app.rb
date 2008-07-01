@@ -9,6 +9,7 @@ get "/" do
   get_hits_data
   get_disk_data
   get_loadavg_data
+  get_futures_data
 
   erb :dashboard
 end
