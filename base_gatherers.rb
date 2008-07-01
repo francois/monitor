@@ -15,12 +15,12 @@ end
 
 def get_disk_free_space(result)
   disk = result["disk"] = Hash.new {|h, k| h[k] = Hash.new}
-  data = `/bin/df -P -k`
+  data = `/bin/df -k`
   data.split("\n")[1..-1].each do |line|
     next unless line[0] == ?/
     cols = line.split(/\s+/)
-    disk[cols[0]]["free"] = cols[3].to_i
-    disk[cols[0]]["used"] = cols[2].to_i
+    disk[cols[0]]["free"] = cols[3].to_i * 1024
+    disk[cols[0]]["used"] = cols[2].to_i * 1024
     disk[cols[0]]["mountpoint"] = cols[5]
   end
 end
