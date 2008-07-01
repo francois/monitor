@@ -69,7 +69,8 @@ def parse_access_log_line(line)
   if match then
     result["session"] = match[1]
     result["ip"] = match[2]
-    result["timestamp"] = Time.parse("%s %s Z" % [match[3], match[4]])
+    date = /^(\d{2})\/(\w{3})\/(\d{4})/.match(match[3])
+    result["timestamp"] = Time.parse("%s/%s/%s %s+0000" % [date[3], months[date[2]], date[1], match[4]])
     result["domain"] = match[5]
     result["path"] = match[7]
     result["response"] = match[9].to_i
@@ -82,4 +83,11 @@ def parse_access_log_line(line)
   end
 
   result
+end
+
+MONTHS = {"Jan" => "01", "Feb" => "02", "Mar" => "03", "Apr" => "04", "May" => "05", "Jun" => "06",
+          "Jul" => "07", "Aug" => "08", "Sep" => "09", "Oct" => "10", "Nov" => "11", "Dec" => "12"}.freeze
+
+def months
+  MONTHS
 end
