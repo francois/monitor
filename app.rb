@@ -1,6 +1,7 @@
 require "rubygems"
 require "gchart"
 require "activesupport"
+require "controller_hit"
 
 $: << "sinatra-0.2.2/lib"
 require "sinatra"
@@ -37,6 +38,11 @@ end
 get "/loadavg" do
   get_loadavg_data
   erb :loadaverage
+end
+
+get "/hits-per-controller" do
+  get_app_data
+  erb :hits_per_controller
 end
 
 def get_hits_data
@@ -95,6 +101,31 @@ def get_futures_data
   @current_futures = @current_futures.sort
 end
 
+def get_app_data
+  @hits_per_controller = Hash.new {|h, k| h[k] = ControllerHit.new(k)}
+  app_data.each do |app|
+    app["hits_per_controller"]["5min"].each do |controller_name, actions|
+      actions.each do |action_name, info|
+        key = "%s/%s" % [controller_name, action_name]
+        @hits_per_controller[key].hit(
+          :count => info["total"].length,
+          :render_time => info["rendering_mean"], :db_time => info["db_mean"], :total_time => info["total_mean"],
+          :render_stddev => info["rendering_stddev"], :db_stddev => info["rendering_stddev"], :total_stddev => info["rendering_stddev"]
+        )
+      end
+    end
+  end
+
+  @hits_per_controller = @hits_per_controller.values
+  @top10_controllers = @hits_per_controller.sort_by(&:hits).reverse[0, 10]
+  @top10_controllers_max = (@top10_controllers.first.hits / 8.0).round * 8.0
+
+  @top10_controllers_labels = []
+  (0..@top10_controllers_max).step((@top10_controllers_max / 4.0).round) do |value|
+    @top10_controllers_labels << value
+  end
+end
+
 helpers do
   def all_data
     return @all_data if @all_data
@@ -112,6 +143,15 @@ helpers do
       @web_data << YAML.load_file(file)
     end
     @web_data
+  end
+
+  def app_data
+    return @app_data if @app_data
+    @app_data = Array.new
+    Dir["data/app*.yml"].each do |file|
+      @app_data << YAML.load_file(file)
+    end
+    @app_data
   end
 
   def db_data

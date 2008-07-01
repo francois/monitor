@@ -1,0 +1,9 @@
+<div class="group">
+  <h2>Hits per Controller/Action</h2>
+  <div class="graph">
+    <h3>In the last 5 minutes</h3>
+    <%= Gchart.bar( :data => @top10_controllers.map(&:hits), :legend => @top10_controllers.map(&:to_s),
+    :max_value => @top10_controllers_max, :axis_with_labels => "y", :axis_labels => @top10_controllers_labels.join("|"),
+    :format => "image_tag") %>
+  </div>
+</div>
