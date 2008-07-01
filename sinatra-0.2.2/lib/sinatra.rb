@@ -474,18 +474,14 @@ module Sinatra
         context = RenderContext.new(self)
         metaclass = class << context; self; end
 
-        puts "Preparing context:"
         instance_variables.each do |key|
           next if %w(@request @response @route_params).include?(key)
-          puts "#{key} = #{instance_variable_get(key).inspect}"
           context.instance_variable_set(key, instance_variable_get(key))
         end
         (options[:locals] || Hash.new).each do |key, value|
-          puts key
           metaclass.send(:attr_reader, key)
           context.instance_variable_set("@#{key}", value)
         end
-        puts "End context"
 
         ::ERB.new(content).result(context.send(:binding))
       end
