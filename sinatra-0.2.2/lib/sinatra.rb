@@ -460,22 +460,34 @@ module Sinatra
     end
     
     private 
-    
-      def render_erb(content, options = {})
-        metaclass = class << self; self; end
-        (options[:locals] || Hash.new).each do |key, value|
-          metaclass.send(:attr_accessor, key)
-          send("#{key}=", value)
+      class RenderContext
+        def initialize(parent_context)
+          @erb_parent_context = parent_context
         end
 
-        begin
-          ::ERB.new(content).result(binding)
-        ensure
-          (options[:locals] || Hash.new).each do |key, value|
-            metaclass.send(:undef_method, "#{key}=")
-            metaclass.send(:undef_method, key)
-          end
+        def method_missing(*args)
+          @erb_parent_context.send(*args)
         end
+      end
+
+      def render_erb(content, options = {})
+        context = RenderContext.new(self)
+        metaclass = class << context; self; end
+
+        puts "Preparing context:"
+        instance_variables.each do |key|
+          next if %w(@request @response @route_params).include?(key)
+          puts "#{key} = #{instance_variable_get(key).inspect}"
+          context.instance_variable_set(key, instance_variable_get(key))
+        end
+        (options[:locals] || Hash.new).each do |key, value|
+          puts key
+          metaclass.send(:attr_reader, key)
+          context.instance_variable_set("@#{key}", value)
+        end
+        puts "End context"
+
+        ::ERB.new(content).result(context.send(:binding))
       end
       
   end
