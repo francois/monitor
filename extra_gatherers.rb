@@ -1,7 +1,10 @@
 configure do
   $future_log_dir = ENV["FUTURE_LOG_DIR"]
+  raise ArgumentError, "FUTURE_LOG_DIR unset or does not point to a directory: #{$future_log_dir.inspect}" unless File.directory?($future_log_dir)
+
   $future_log_file = ENV["FUTURE_LOG_FILE"]
   $future_log_file = File.join($future_log_dir, $future_log_file) unless File.file?($future_log_file)
+  raise ArgumentError, "FUTURE_LOG_FILE does not point to a log file, or it is not a file: #{$future_log_file.inspect}" unless File.file?($future_log_file)
 
   LOG_LINE_REGEXP = /^(\d+):(\d+)\s-\s(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2})\s-\s(\w+)(?:\s(\d+):(\w+)(?:\s(.*))?)?$/
 end
