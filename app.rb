@@ -18,6 +18,11 @@ get "/" do
   erb :dashboard
 end
 
+get "/stylesheet.css" do
+  header "Content-Type" => "text/css; charset=UTF-8"
+  erb :stylesheet
+end
+
 get "/next-futures" do
   get_futures_data
   erb :next_futures
