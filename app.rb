@@ -5,7 +5,30 @@ require "activesupport"
 $: << "sinatra-0.2.2/lib"
 require "sinatra"
 
+get "/" do
+  get_hits_data
+  get_disk_data
+  get_loadavg_data
+
+  erb :dashboard
+end
+
 get "/hits-per-domain" do
+  get_hits_data
+  erb :hits_per_domain
+end
+
+get "/disk-free" do
+  get_disk_data
+  erb :disk_free
+end
+
+get "/loadavg" do
+  get_loadavg_data
+  erb :loadaverage
+end
+
+def get_hits_data
   hits = Hash.new {|h, k| h[k] = Hash.new}
   web_data.each do |data|
     hits["1min"].merge!(data["hits_per_domain"]["hit1"])
@@ -16,11 +39,9 @@ get "/hits-per-domain" do
   hits.each_pair do |scale, values|
     instance_variable_set("@top10_#{scale}", values.sort_by(&:last).reverse[0, 10])
   end
-
-  erb :hits_per_domain
 end
 
-get "/disk-free" do
+def get_disk_data
   @disk = []
   all_data.each do |data|
     name = data["name"]
@@ -31,10 +52,9 @@ get "/disk-free" do
   end
 
   @disk.sort!
-  erb :disk_free
 end
 
-get "/loadavg" do
+def get_loadavg_data
   @loadavg = Hash.new {|h, k| h[k] = Hash.new}
   all_data.each do |data|
     name = data["name"]
@@ -46,8 +66,6 @@ get "/loadavg" do
   @loadavg.each do |key, value|
     @loadavg[key] = value.sort
   end
-
-  erb :loadaverage
 end
 
 helpers do
