@@ -2,6 +2,8 @@ require "time"
 
 configure do
   $access_log_path = ENV["ACCESS_LOG_PATH"]
+  raise ArgumentError, "ACCESS_LOG_PATH unset or is not a file: #{$access_log_path.inspect}" unless File.file?($access_log_path)
+
   ACCESS_LOG_LINE_REGEXP = /^([-\w]+)\s(\d+[.]\d+[.]\d+[.]\d+)\s\[(\d+\/\w+\/\d+):(\d\d:\d\d:\d\d)\s\+0000\]\s([^\s]+)\s"(GET|POST|HEAD|PUT|DELETE|OPTIONS|TRACE)\s([^\s]+)\s(\w+\/\d\.\d)"\s(\d+)\s(-|\d+)\s"([^"]*)"\s"([^"]*)"\s(\d+)$/.freeze
 end
 
