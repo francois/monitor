@@ -4,12 +4,16 @@ require "gchart"
 require "activesupport"
 
 get "/hits-per-domain" do
-  web_data.each do |web|
-    hits = web["hits_per_domain"]
-    hits.each_pair do |scale, values|
-      top10 = instance_variable_set("@top10_#{scale}", values.sort_by(&:last).reverse[0, 10])
-      instance_variable_set("@hits_per_domain_#{scale}", Gchart.pie(:data => top10.map(&:last), :legend => top10.map(&:first), :size => "360x200"))
-    end
+  hits = Hash.new {|h, k| h[k] = Hash.new}
+  web_data.each do |data|
+    puts data.inspect
+    hits["1min"].merge!(data["hits_per_domain"]["hit1"])
+    hits["5min"].merge!(data["hits_per_domain"]["hit5"])
+    hits["15min"].merge!(data["hits_per_domain"]["hit15"])
+  end
+
+  hits.each_pair do |scale, values|
+    instance_variable_set("@top10_#{scale}", values.sort_by(&:last).reverse[0, 10])
   end
 
   erb :hits_per_domain

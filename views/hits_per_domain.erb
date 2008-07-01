@@ -2,7 +2,7 @@
   <h2>Top 10 domains</h2>
   <div class="graph">
     <h3>In the last minute</h3>
-    <img src="<%= @hits_per_domain_1min %>"/>
+    <%= Gchart.pie(:data => @top10_1min.map(&:last), :legend => @top10_1min.map(&:first), :size => "360x200", :format => "image_tag") %>
     <table>
       <thead>
         <tr>
@@ -22,7 +22,7 @@
   </div>
   <div class="graph">
     <h3>In the last 5 minutes</h3>
-    <img src="<%= @hits_per_domain_5min %>"/>
+    <%= Gchart.pie(:data => @top10_5min.map(&:last), :legend => @top10_5min.map(&:first), :size => "360x200", :format => "image_tag") %>
     <table>
       <thead>
         <tr>
@@ -42,7 +42,7 @@
   </div>
   <div class="graph">
     <h3>In the last 15 minutes</h3>
-    <img src="<%= @hits_per_domain_15min %>"/>
+    <%= Gchart.pie(:data => @top10_15min.map(&:last), :legend => @top10_15min.map(&:first), :size => "360x200", :format => "image_tag") %>
     <table>
       <thead>
         <tr>
