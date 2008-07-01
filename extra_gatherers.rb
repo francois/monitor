@@ -1,5 +1,6 @@
 configure do
   $rails_log_path = ENV["RAILS_LOG_PATH"]
+  raise ArgumentError, "No path to Rails log file, or not a file (set RAILS_LOG_PATH): #{$rails_log_path.inspect}" unless File.file?($rails_log_path)
 
   RAILS_TIMESTAMP_REGEXP = /^Processing\s(\w+)#(\w+)\s\(for\s(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})\sat\s(\d{4}-\d{2}-\d{2}\s\d{2}:\d{2}:\d{2})\)\s\[(\w+)\]$/
   RAILS_DATA_REGEXP = /^Completed\sin\s(\d+\.\d+)\s\(\d+\sreqs\/sec\)\s\|\sRendering:\s(\d+\.\d+)\s\(\d+%\)\s\|\sDB:\s(\d+\.\d+)\s\(\d+%\)\s\|\s(\d+)\s(\w+)\s\[(.+)\]$/
@@ -12,7 +13,7 @@ def get_request_statistics(result)
   contr15 = result["hits_per_controller"]["15min"] = Hash.new {|h, k| h[k] = Hash.new {|h, k| h[k] = Hash.new {|h, k| h[k] = Array.new}}}
 
   elif_iterator($rails_log_path, :rails_log_parser, "timestamp") do |data, data1, data5, data15|
-    # If a request never completed, we will only have the timestamp line.
+    # If a request never completed, we will only have the timestamp key.
     next if data.keys.length == 1
 
     if data1 then
