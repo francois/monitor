@@ -4,6 +4,15 @@
   <title>XLsuite Cluster Status</title>
   <link type="text/css" rel="stylesheet" href="/stylesheet.css"/>
   <meta http-equiv="Refresh" content="30; URL=/"/> 
+  <script type="text/javascript" src="http://www.google.com/jsapi"></script>
+  <script type="text/javascript" charset="utf-8"><!--
+    google.load("jquery", "1.2");
+    google.setOnLoadCallback(function() {
+      $(".graph table").hide();
+      $(".graph img").click(function() { $(this).parent(".graph").find("table").toggle(); });
+      $(".detailed").click(function() { $(this).find(".details").toggle(); });
+    });
+  // --></script>
 </head>
 <body>
   <h1>XLsuite Cluster Status</h1>
