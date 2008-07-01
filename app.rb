@@ -13,6 +13,16 @@ get "/" do
   erb :dashboard
 end
 
+get "/next-futures" do
+  get_futures_data
+  erb :next_futures
+end
+
+get "/current-futures" do
+  get_futures_data
+  erb :current_futures
+end
+
 get "/hits-per-domain" do
   get_hits_data
   erb :hits_per_domain
@@ -68,6 +78,22 @@ def get_loadavg_data
   end
 end
 
+def get_futures_data
+  db = db_data.first
+  @future_queue_length = db["future_queue_length"]
+  @next_10_futures = db["next10"]
+
+  @current_futures = Hash.new {|h, k| h[k] = Hash.new}
+  future_data.each do |future|
+    name = future["name"]
+    future["current_futures"].each do |id, data|
+      @current_futures[name][id] = data
+    end
+  end
+
+  @current_futures = @current_futures.sort
+end
+
 helpers do
   def all_data
     return @all_data if @all_data
@@ -85,6 +111,24 @@ helpers do
       @web_data << YAML.load_file(file)
     end
     @web_data
+  end
+
+  def db_data
+    return @db_data if @db_data
+    @db_data = Array.new
+    Dir["data/db*.yml"].each do |file|
+      @db_data << YAML.load_file(file)
+    end
+    @db_data
+  end
+
+  def future_data
+    return @future_data if @future_data
+    @future_data = Array.new
+    Dir["data/future*.yml"].each do |file|
+      @future_data << YAML.load_file(file)
+    end
+    @future_data
   end
 
   # Copied from ActionPack 2.1.0.
@@ -115,8 +159,11 @@ helpers do
 
   def partial(template, *args)
     options = args.extract_options!
+    puts "partial(#{template.inspect}, #{args.inspect}, #{options.inspect})"
     if collection = options.delete(:collection) then
+      puts "Rendering collection partial"
       collection.inject([]) do |buffer, member|
+        puts options.merge(:layout => false, :locals => {template.to_sym => member}).inspect
         buffer << erb(template, options.merge(:layout => false, :locals => {template.to_sym => member}))
       end.join("\n")
     else
