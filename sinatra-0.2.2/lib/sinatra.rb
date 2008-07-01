@@ -462,7 +462,20 @@ module Sinatra
     private 
     
       def render_erb(content, options = {})
-        ::ERB.new(content).result(binding)
+        metaclass = class << self; self; end
+        (options[:locals] || Hash.new).each do |key, value|
+          metaclass.send(:attr_accessor, key)
+          send("#{key}=", value)
+        end
+
+        begin
+          ::ERB.new(content).result(binding)
+        ensure
+          (options[:locals] || Hash.new).each do |key, value|
+            metaclass.send(:undef_method, "#{key}=")
+            metaclass.send(:undef_method, key)
+          end
+        end
       end
       
   end
