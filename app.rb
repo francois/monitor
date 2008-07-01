@@ -1,7 +1,9 @@
 require "rubygems"
-require "sinatra"
 require "gchart"
 require "activesupport"
+
+$: << "sinatra-0.2.2/lib"
+require "sinatra"
 
 get "/hits-per-domain" do
   hits = Hash.new {|h, k| h[k] = Hash.new}
