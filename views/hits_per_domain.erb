@@ -2,47 +2,14 @@
   <h2>Top 10 domains</h2>
   <div class="graph">
     <h3>In the last minute</h3>
-    <%= Gchart.pie(:data => @top10_1min.map(&:last), :legend => @top10_1min.map(&:first), :size => "360x200", :format => "image_tag") %>
-    <table>
-      <thead>
-        <tr>
-          <th>Domain</th>
-          <th>Hits</th>
-        </tr>
-      </thead>
-      <tbody>
-        <%= partial(:hit, :collection => @top10_1min) %>
-      </tbody>
-    </table>
+    <%= partial(:hits_table, :locals => {:top10 => @top10_1min}) %>
   </div>
   <div class="graph">
     <h3>In the last 5 minutes</h3>
-    <%= Gchart.pie(:data => @top10_5min.map(&:last), :legend => @top10_5min.map(&:first), :size => "360x200", :format => "image_tag") %>
-    <table>
-      <thead>
-        <tr>
-          <th>Domain</th>
-          <th>Hits</th>
-        </tr>
-      </thead>
-      <tbody>
-        <%= partial(:hit, :collection => @top10_5min) %>
-      </tbody>
-    </table>
+    <%= partial(:hits_table, :locals => {:top10 => @top10_5min}) %>
   </div>
   <div class="graph">
     <h3>In the last 15 minutes</h3>
-    <%= Gchart.pie(:data => @top10_15min.map(&:last), :legend => @top10_15min.map(&:first), :size => "360x200", :format => "image_tag") %>
-    <table>
-      <thead>
-        <tr>
-          <th>Domain</th>
-          <th>Hits</th>
-        </tr>
-      </thead>
-      <tbody>
-        <%= partial(:hit, :collection => @top10_15min) %>
-      </tbody>
-    </table>
+    <%= partial(:hits_table, :locals => {:top10 => @top10_15min}) %>
   </div>
 </div>

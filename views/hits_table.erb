@@ -1,0 +1,12 @@
+<%= Gchart.pie(:data => top10.map(&:last), :legend => top10.map(&:first), :size => "360x200", :format => "image_tag") %>
+<table>
+  <thead>
+    <tr>
+      <th>Domain</th>
+      <th>Hits</th>
+    </tr>
+  </thead>
+  <tbody>
+    <%= partial(:hit, :collection => top10) %>
+  </tbody>
+</table>
