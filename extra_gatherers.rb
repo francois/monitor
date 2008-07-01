@@ -6,6 +6,8 @@ configure do
   $db_password = ENV["DB_PASSWORD"]
   $db_database = ENV["DB_DATABASE"]
   $db_host = ENV["DB_HOST"]
+
+  raise ArgumentError, "DB_DATABASE is unset" if $db_database.nil? || $db_database.to_s.empty?
 end
 
 def get_seconds_behind_master(result)
