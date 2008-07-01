@@ -13,6 +13,8 @@ get "/" do
   get_futures_data
   get_app_data
 
+  @last_update = Time.now.utc
+
   erb :dashboard
 end
 
