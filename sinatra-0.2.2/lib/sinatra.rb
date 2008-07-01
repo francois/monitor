@@ -465,8 +465,8 @@ module Sinatra
           @erb_parent_context = parent_context
         end
 
-        def method_missing(*args)
-          @erb_parent_context.send(*args)
+        def method_missing(*args, &block)
+          @erb_parent_context.send(*args, &block)
         end
       end
 
