@@ -5,7 +5,7 @@ end
 def get_loadavg(result)
   hash = result["loadavg"] = Hash.new
   uptime = `/usr/bin/uptime`
-  if uptime =~ /(?:\s(\d+[.,]\d+)){3}$/ then
+  if uptime =~ /(?:\s(\d+[.,]\d+),?){3}$/ then
     loadaverages = $&.strip.split(/\s+/).map {|avg| avg.sub(",", ".")}.map {|avg| avg.to_f}
     hash["1min"] = loadaverages[0]
     hash["5min"] = loadaverages[1]
