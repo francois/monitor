@@ -1,0 +1,6 @@
+<div class="group">
+  <h2>Disk Free Space</h2>
+  <div class="graph">
+    <%= Gchart.bar(:data => @disk.map(&:last), :legend => @disk.map(&:first), :format => "image_tag") %>
+  </div>
+</div>

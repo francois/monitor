@@ -12,6 +12,16 @@ get "/hits-per-domain" do
   erb :hits_per_domain
 end
 
+get "/disk-free" do
+  @disk = []
+  disk = web0_data["disk"]
+  disk.each_pair do |disk, data|
+    @disk << ["web0@#{data["mountpoint"]}", data["free"]]
+  end
+
+  erb :disk_free
+end
+
 helpers do
   def web0_data
     @web0_data ||= YAML.load_file("web0.yml")
