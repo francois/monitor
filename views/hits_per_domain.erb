@@ -11,12 +11,7 @@
         </tr>
       </thead>
       <tbody>
-        <% @top10_1min.each do |domain, hits| %>
-        <tr>
-          <td><%= domain %></td>
-          <td><%= number_with_delimiter(hits) %></td>
-        </tr>
-        <% end %>
+        <%= partial(:hit, :collection => @top10_1min) %>
       </tbody>
     </table>
   </div>
@@ -31,12 +26,7 @@
         </tr>
       </thead>
       <tbody>
-        <% @top10_5min.each do |domain, hits| %>
-        <tr>
-          <td><%= domain %></td>
-          <td><%= number_with_delimiter(hits) %></td>
-        </tr>
-        <% end %>
+        <%= partial(:hit, :collection => @top10_5min) %>
       </tbody>
     </table>
   </div>
@@ -51,12 +41,7 @@
         </tr>
       </thead>
       <tbody>
-        <% @top10_15min.each do |domain, hits| %>
-        <tr>
-          <td><%= domain %></td>
-          <td><%= number_with_delimiter(hits) %></td>
-        </tr>
-        <% end %>
+        <%= partial(:hit, :collection => @top10_15min) %>
       </tbody>
     </table>
   </div>

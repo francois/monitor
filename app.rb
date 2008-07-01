@@ -8,7 +8,6 @@ require "sinatra"
 get "/hits-per-domain" do
   hits = Hash.new {|h, k| h[k] = Hash.new}
   web_data.each do |data|
-    puts data.inspect
     hits["1min"].merge!(data["hits_per_domain"]["hit1"])
     hits["5min"].merge!(data["hits_per_domain"]["hit5"])
     hits["15min"].merge!(data["hits_per_domain"]["hit15"])
@@ -77,6 +76,17 @@ helpers do
       parts.join separator
     rescue
       number
+    end
+  end
+
+  def partial(template, *args)
+    options = args.extract_options!
+    if collection = options.delete(:collection) then
+      collection.inject([]) do |buffer, member|
+        buffer << erb(template, options.merge(:layout => false, :locals => {template.to_sym => member}))
+      end.join("\n")
+    else
+      erb(template, options)
     end
   end
 end
