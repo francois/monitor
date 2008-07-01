@@ -1,7 +1,9 @@
 require "rubygems"
 require "sinatra"
-require "core_ext/array"
 require "elif_iterator"
+
+$: << File.dirname(__FILE__)
+require "core_ext/array"
 require "base_gatherers"
 require "extra_gatherers"
 
