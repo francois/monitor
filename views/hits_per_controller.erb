@@ -5,5 +5,29 @@
     <%= Gchart.bar( :data => @top10_controllers.map(&:hits), :legend => @top10_controllers.map(&:to_s),
     :max_value => @top10_controllers_max, :axis_with_labels => "y", :axis_labels => @top10_controllers_labels.join("|"),
     :size => "540x120", :format => "image_tag") %>
+    <table class="data">
+      <thead>
+        <tr>
+          <th>Controller</th>
+          <th>Action</th>
+          <th>Hits</th>
+          <th>%</th>
+        </tr>
+      </thead>
+      <tfoot>
+        <tr>
+          <td colspan="2">
+            Total
+          </td>
+          <td>
+            <%= number_with_delimiter(@top10_controllers.map(&:hits).sum) %>
+          </td>
+          <td>100%</td>
+        </tr>
+      </tfoot>
+      <tbody>
+        <%= partial(:hit_per_controller, :collection => @top10_controllers, :locals => {:total_hits =>  @top10_controllers.map(&:hits).sum.to_f}) %>
+      </tbody>
+    </table>
   </div>
 </div>

@@ -1,0 +1,6 @@
+<tr>
+  <td><%= hit_per_controller.controller_name %></td>
+  <td><%= hit_per_controller.action_name %></td>
+  <td><%= hit_per_controller.hits %></td>
+  <td><%= number_to_percentage(hit_per_controller.hits / total_hits * 100.0, :precision => 1) %>
+</tr>
