@@ -11,6 +11,7 @@ configure do
 end
 
 def get_seconds_behind_master(result)
-  data = mysql("-e", "SHOW SLAVE STATUS")
+  data = mysql("-e", '"SHOW SLAVE STATUS"')
+  return if data.nil? || data.strip.empty?
   result["seconds_behind_master"] = data.split("\n").grep(/seconds_behind_master/i).last.split(/\s+/).last.to_i
 end
