@@ -3,6 +3,7 @@
   <div class="graph">
     <h3>In the last 5 minutes</h3>
     <%= Gchart.bar( :data => @top10_controllers.map(&:hits), :legend => @top10_controllers.map(&:to_s),
+    :bar_colors => "76A4FB|FB76A4|76FBA4|A476FB|76A4FB|A4FB76|A476FB",
     :max_value => @top10_controllers_max, :axis_with_labels => "y", :axis_labels => @top10_controllers_labels.join("|"),
     :size => "540x120", :format => "image_tag") %>
     <table class="data">
