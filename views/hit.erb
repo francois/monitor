@@ -1,4 +1,5 @@
 <tr>
-  <td><%= hit.first %></td>
-  <td><%= number_with_delimiter(hit.last) %></td>
+  <td><a href="http://<%= hit.first %>/"><%= hit.first %></a></td>
+  <td class="number"><%= number_with_delimiter(hit.last) %></td>
+  <td class="number"><%= number_to_percentage(hit.last / total_hits.to_f * 100.0, :precision => 1) %></td>
 </tr>

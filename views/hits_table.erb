@@ -1,12 +1,20 @@
 <%= Gchart.pie(:data => top10.map(&:last), :legend => top10.map(&:first), :size => "500x220", :format => "image_tag") %>
-<table>
+<table class="data" cellspacing="0" cellpadding="0">
   <thead>
     <tr>
       <th>Domain</th>
       <th>Hits</th>
+      <th>%</th>
     </tr>
   </thead>
+  <tfoot>
+    <tr>
+      <td>Total</td>
+      <td class="number"><%= number_with_delimiter(top10.map(&:last).sum) %></td>
+      <td class="number">100%</td>
+    </tr>
+  </tfoot>
   <tbody>
-    <%= partial(:hit, :collection => top10) %>
+    <%= partial(:hit, :collection => top10, :locals => {:total_hits => top10.map(&:last).sum}) %>
   </tbody>
 </table>
