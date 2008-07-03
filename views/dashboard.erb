@@ -32,16 +32,7 @@
       <%= partial(:loadavg, :locals => {:loadavg => @loadavg["1min"]}) %>
     </div>
   </div>
-  <div class="group">
-    <h2>Disk Free Space</h2>
-    <div class="graph">
-      <%= Gchart.bar(:data => @disk.map(&:last), :legend => @disk.map(&:first),
-      :alt => "#{@disk.map {|name, free| '%s %s free' % [name, number_to_human_size(free)]}.join(", ")}",
-      :size => "450x200",
-      :bar_colors => "76A4FB|FB76A4|76FBA4|A476FB|76A4FB|A4FB76|A476FB",
-      :format => "image_tag") %>
-    </div>
-  </div>
+  <%= partial(:disk_free) %>
   <div id="section2">
     <%= partial(:hits_per_controller) %>
     <%= partial(:current_futures) %>
