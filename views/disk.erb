@@ -1,5 +1,9 @@
 <tr>
   <td><%= disk.first.split("@").first %></td>
   <td><%= disk.first.split("@").last %></td>
+
+  <td><%= number_to_human_size(disk[1] + disk[2]) %></td>
+  <td><%= number_to_human_size(disk[1]) %></td>
   <td><%= number_to_human_size(disk.last) %></td>
+  <td><%= number_to_percentage(disk[2] / (disk[1] + disk[2]).to_f * 100.0) %></td>
 </tr>

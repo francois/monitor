@@ -72,7 +72,7 @@ def get_disk_data
     name = data["name"]
     disk = data["disk"]
     disk.each_pair do |disk, data|
-      @disk << ["#{name}@#{data["mountpoint"]}", data["free"]]
+      @disk << ["#{name}@#{data["mountpoint"]}", data["used"], data["free"]]
     end
   end
 
