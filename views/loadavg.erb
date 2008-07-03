@@ -2,3 +2,14 @@
     :alt => loadavg.map {|name, value| "%s %f" % [name, value]}.join(", "),
     :max_value => 4.0, :axis_with_labels => "y", :axis_labels => [0.0, 1.0, 2.0, 3.0, 4.0].map(&:to_s).join("|"),
     :format => "image_tag") %>
+<table class="data" cellspacing="0" cellpadding="0">
+  <thead>
+    <tr>
+      <th>Server</th>
+      <th>Value</th>
+    </tr>
+  </thead>
+  <tbody>
+    <%= partial :loadavg_data, :collection => loadavg %>
+  </tbody>
+</table>
