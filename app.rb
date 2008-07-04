@@ -234,13 +234,10 @@ helpers do
 
   def partial(template, *args)
     options = args.extract_options!
-    puts "partial(#{template.inspect}, #{args.inspect}, #{options.inspect})"
     if collection = options.delete(:collection) then
       locals = options.delete(:locals) || {}
-      puts "Rendering collection partial"
       collection.inject([]) do |buffer, member|
         mylocals = {template.to_sym => member}.merge(locals)
-        puts mylocals.inspect
         buffer << erb(template, options.merge(:layout => false, :locals => mylocals))
       end.join("\n")
     else
