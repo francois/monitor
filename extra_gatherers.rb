@@ -1,3 +1,5 @@
+require "stringio"
+
 configure do
   $future_log_dir = ENV["FUTURE_LOG_DIR"]
   raise ArgumentError, "FUTURE_LOG_DIR unset or does not point to a directory: #{$future_log_dir.inspect}" unless File.directory?($future_log_dir)
@@ -16,7 +18,8 @@ def get_current_futures(result)
     line = File.read(file)
     fields = line.split(/\s+/, 5)
     hash[instance_id]["state"] = fields[1]
-    hash[instance_id]["type"] = fields[3]
+    hash[instance_id]["type"] = fields[2].nil? || fields[2].empty? ? nil : fields[2]
+    hash[instance_id]["args"] = fields[3].nil? || fields[3].empty? ? nil : YAML.load(fields[3])
   end
 end
 
