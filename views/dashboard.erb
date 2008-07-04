@@ -34,7 +34,7 @@
   <div class="group">
     <h2>Top 10 domains</h2>
     <div class="graph">
-      <h3>In the last 15 minutes</h3>
+      <h3>In the last 15 minutes (<%= number_with_delimiter(@top10_15min.map(&:last).sum) %> hits)</h3>
       <%= partial(:hits_table, :locals => {:top10 => @top10_15min}) %>
     </div>
   </div>
