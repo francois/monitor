@@ -1,6 +1,17 @@
-<dt><%= current_future.first %></dt>
-<dd>
-  <ul>
+<h3><%= current_future.first %></h3>
+<table>
+  <thead>
+    <tr>
+      <th rowspan="2">Id</th>
+      <th rowspan="2">Status</th>
+      <th colspan="2"><em>When running</em></th>
+    </tr>
+    <tr>
+      <th>Type</th>
+      <th>Arguments</th>
+    </tr>
+  </thead>
+  <tbody>
     <%= partial(:future, :collection => current_future.last) %>
-  </ul>
-</dd>
+  </tbody>
+</table>
