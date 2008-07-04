@@ -1,10 +1,10 @@
 require "rake/testtask"
 
-task :rebase do
+task :merge do
   sh "git checkout master"
   %w(app future db slave web).each do |role|
     sh "git checkout #{role}"
-    sh "git rebase master"
+    sh "git merge master"
   end
 end
 
