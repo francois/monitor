@@ -16,11 +16,12 @@ def get_futures_queue_length(result)
 end
 
 def get_next_futures(result)
-  data = mysql("-e", '"SELECT type, args FROM futures WHERE futures.started_at IS NULL AND scheduled_at < NOW() ORDER BY priority, scheduled_at LIMIT 0,10"')
+  data = mysql("-e", '"SELECT type, scheduled_at, args FROM futures WHERE futures.started_at IS NULL ORDER BY priority, scheduled_at LIMIT 0,10"')
+
   result["next10"] = Array.new
   FasterCSV.parse(data, :col_sep => "\t", :headers => true, :return_headers => false) do |row|
-    args = row[1].gsub("\\n", "\n")
-    result["next10"] << {:type => row[0], :args => YAML.load(args)}
+    args = row[2].gsub("\\n", "\n")
+    result["next10"] << {:type => row[0], :args => YAML.load(args), :scheduled_at => Time.parse(row[1] + "+0000")}
   end
 end
 
