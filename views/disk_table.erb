@@ -4,7 +4,7 @@
   <%= Gchart.bar(:data => data.map(&:last), :legend => data.map(&:first),
       :alt => "#{data.map {|name, free| '%s %s free' % [name, number_to_human_size(free)]}.join(", ")}",
       :size => "340x200",
-      :bar_colors => "76A4FB|FB76A4|76FBA4|A476FB|76A4FB|A4FB76|A476FB",
+      :bar_colors => bar_colors.join("|"),
       :format => "image_tag") %>
   <table class="data">
     <thead>

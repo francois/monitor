@@ -2,6 +2,7 @@ require "rubygems"
 require "gchart"
 require "activesupport"
 require "controller_hit"
+require "core_ext/array"
 
 $: << "sinatra-0.2.2/lib"
 require "sinatra"
@@ -247,5 +248,10 @@ helpers do
     else
       erb(template, options)
     end
+  end
+
+  def bar_colors(quantity=8)
+    nibbles = ["7A", "A4", "FB"].permutations
+    nibbles[0, quantity].map {|set| set.join("")}
   end
 end
