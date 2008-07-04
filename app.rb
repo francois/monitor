@@ -72,7 +72,6 @@ def get_disk_data
   all_data.each do |data|
     name = data["name"]
     disk = data["disk"]
-    puts "name: #{name.inspect}, disk: #{disk.inspect}"
     disk.each_pair do |device, data|
       mountpoint = data["mountpoint"]
       used, free = data["used"], data["free"]
@@ -80,7 +79,6 @@ def get_disk_data
     end
   end
 
-  puts @disk.inspect
   @disk
 end
 
