@@ -1,4 +1,5 @@
-<%= Gchart.pie(:data => top10.map(&:last), :legend => top10.map(&:first), :size => "500x220", :format => "image_tag") %>
+<%= Gchart.pie(:data => top10.map(&:last), :legend => top10.map(&:first),
+    :size => "500x220", :bar_colors => bar_colors(top10.last.length).join("|"), :format => "image_tag") %>
 <table class="data" cellspacing="0" cellpadding="0">
   <thead>
     <tr>
