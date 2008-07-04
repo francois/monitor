@@ -9,6 +9,19 @@
       $(".graph table").hide();
       $(".graph img").click(function() { $(this).parent(".graph").find("table").toggle(); });
       $(".detailed").click(function() { $(this).find(".details").toggle(); });
+
+      // Show what's JS only and which was hidden.
+      $("#open-all").show().addClass("active");
+      $("#close-all").addClass("active");
+      $(".detailed").addClass("active");
+      $(".graph img").addClass("active");
+
+      function toggleDetailsFuture(root) {
+        $(".detailed").find(".details").toggle()
+      }
+
+      $("#open-all").click(function() { $(this).toggle(); $("#close-all").toggle(); toggleDetailsFuture($(this)); });
+      $("#close-all").click(function() { $(this).toggle(); $("#open-all").toggle(); toggleDetailsFuture($(this)); });
     });
   // --></script>
   <style type="text/css">
