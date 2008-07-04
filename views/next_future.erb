@@ -1,6 +1,6 @@
 <li class="detailed"><%= next_future[:type] %>
   <div style="display:none" class="details">
-    <div><%= next_future[:scheduled_at].to_s %></div>
+    <div><%= next_future[:scheduled_at].to_s %> (<strong><%= next_runtime(next_future) %></strong>)</div>
     <div><%= next_future[:args] ? next_future[:args].inspect : nil %></div>
   </div>
 </li>
