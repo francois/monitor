@@ -67,16 +67,20 @@ def get_hits_data
 end
 
 def get_disk_data
-  @disk = []
+  @disk = Hash.new {|h, k| h[k] = Array.new}
   all_data.each do |data|
     name = data["name"]
     disk = data["disk"]
-    disk.each_pair do |disk, data|
-      @disk << ["#{name}@#{data["mountpoint"]}", data["used"], data["free"]]
+    puts "name: #{name.inspect}, disk: #{disk.inspect}"
+    disk.each_pair do |device, data|
+      mountpoint = data["mountpoint"]
+      used, free = data["used"], data["free"]
+      @disk[mountpoint] << [name, used, free]
     end
   end
 
-  @disk.sort!
+  puts @disk.inspect
+  @disk
 end
 
 def get_loadavg_data

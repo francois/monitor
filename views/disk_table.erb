@@ -1,0 +1,23 @@
+<% data = disk_table.last %>
+<div class="graph">
+  <h3>Mountpoint: <%= disk_table.first %></h3>
+  <%= Gchart.bar(:data => data.map(&:last), :legend => data.map(&:first),
+      :alt => "#{data.map {|name, free| '%s %s free' % [name, number_to_human_size(free)]}.join(", ")}",
+      :size => "340x200",
+      :bar_colors => "76A4FB|FB76A4|76FBA4|A476FB|76A4FB|A4FB76|A476FB",
+      :format => "image_tag") %>
+  <table class="data">
+    <thead>
+      <tr>
+        <th>Server</th>
+        <th>Total Space</th>
+        <th>Used Space</th>
+        <th>Free Space</th>
+        <th>% Free</th>
+      </tr>
+    </thead>
+    <tbody>
+      <%= partial(:disk, :collection => data) %>
+    </tbody>
+  </table>
+</div>
